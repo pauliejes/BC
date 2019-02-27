@@ -1,0 +1,35 @@
+To run in interactive mode:
+	$> ./bc
+To run with I/O rediraction:
+	$> ./bc < test
+
+Examples of commands
+
+assignment:
+	a = 7
+	=7
+
+	b = 5
+	=5
+
+addition:
+	7 + 2
+	=9
+
+	a + b
+	=12
+
+multiplication
+	3 * 5
+	=15
+
+	a * b
+	=35
+
+you can string things together also
+	a = 5 + 10 * 2
+	=25
+
+and use parenthesis
+	a = (5 + 10) * 2
+	=30

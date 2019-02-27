@@ -1,15 +1,19 @@
-LEX=flex
-YACC=yacc
-CC=g++
+LEX = flex
+YACC = bison
+CC = g++
+bc:			calc.tab.o lex.yy.o
+			$(CC) -o bc calc.tab.o lex.yy.o -lfl -lm
 
-bc: 	y.tab.o lex.yy.o
-		$(CC) -o bc y.tab.o lex.yy.o -lfl -lm
-lex.yy.o: 	lex.yy.c y.tab.h
-lex.yy.o y.tab.o: 	general.h
-y.tab.c y.tab.h:	calc.y
-					$(YACC) -d calc.y
-lex.yy.c:	calc.l
-			$(LEX) calc.l
+lex.yy.o:		lex.yy.cc calc.tab.hpp
 
-clean: 	
-	rm bc lex.yy.* y.tab.*
+lex.yy.o calc.tab.o:	general.h
+
+calc.tab.cpp calc.tab.hpp:	calc.ypp	
+			$(YACC) -d calc.ypp
+
+lex.yy.cc:		calc.l
+			$(LEX) -+ calc.l
+
+clean:
+			rm bc lex.yy.* calc.tab.*
+
