@@ -652,7 +652,7 @@ YY_RULE_SETUP
 case 4:
 YY_RULE_SETUP
 #line 26 "calc.l"
-{yylval.symbol_ptr = sym_table.insert(yytext);return(ID);}
+{yylval.symbol_ptr = sym_table.lookup(yytext);return(ID);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP

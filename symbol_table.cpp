@@ -18,6 +18,14 @@ int Symbol_node::getval(void) {
 	return this->val;
 }
 
+Symbol_node * Symbol_node::getNext() {
+	return this->next;
+}
+
+void Symbol_node::setNext(Symbol_node * next) {
+	this->next = next;
+}
+
 Symbol_table::Symbol_table(void)
 {
 	table = new Symbol_ptr[211];
@@ -38,23 +46,17 @@ int Symbol_table::hash(const char * name)
 	{
 		hashVal += int(name[i]);
 	}
+	cout << "hash = " << hashVal % 211 << endl;
 	return hashVal % 211;
 }
 
-Symbol_ptr Symbol_table::insert (char * name) 
+Symbol_ptr Symbol_table::insert (char * name, Symbol_ptr mother_node) 
 {
 	Symbol_ptr ptr;
-	int hashVal = hash(name);
-
-	//if bucket is empty put node address in
-	if(this->table[hashVal] == 0) {
-		//cout << "adding new node\n";
-		this->table[hashVal] = new Symbol_node(name);
-		ptr = this->table[hashVal];
-	} else {
-		//cout << "finding old node\n";
-		ptr = table[hashVal];
-	}
+	mother_node->setNext(new Symbol_node(name));
+	ptr = mother_node->getNext();
+	ptr->setNext(0);
+	
 	return ptr;
 }
 
@@ -62,9 +64,37 @@ Symbol_ptr Symbol_table::lookup(char * name)
 {
 	Symbol_ptr ptr;
 	int hashVal = this->hash(name);
-	//cout << "hashVal " << hashVal << endl; 
-	ptr = this->table[hashVal];
-	//cout << "past the fucking table thign\n";
+	Symbol_ptr cur_ptr;
+	
+	//while loop vars
+	cur_ptr = table[hashVal];
+	bool found = false;
+	//traverse linked list of bucket looking for symbol
+	cout << "current pointer : " << cur_ptr << endl;
+	while(cur_ptr != 0 && found == false) 
+	{
+		cout << "traversing linked list\n";
+		cout << "cur_id = " << cur_ptr->id << endl;
+		if(cur_ptr->id == name) {
+			//found it, tell loop to stop
+			cout << "found " << cur_ptr->id << " = " << name << endl;
+			ptr = cur_ptr;
+			found = true;
+		} else {
+			if(cur_ptr->next == 0) {
+				cout << "not found\n";
+				found = true;
+				ptr = this->insert(name, cur_ptr);
+			}
+		}
+		cur_ptr = cur_ptr->next;
+	}
+	//if nothing there
+	if(cur_ptr == 0 && found == false) {
+		cout << "nada\n";
+		ptr = table[hashVal] = new Symbol_node(name);
+		ptr->setNext(0);
+	}
 	return ptr;
 }
 
