@@ -3,18 +3,80 @@
 #include<iostream>
 #include<cstdio>
 #include<cmath>
+#include <cstdlib>
 using namespace std;
-static int var[26];
+//static int var[26];
+
+#ifndef SYM_NODE
+#define SYM_NODE
+class Symbol_node {
+	friend class Symbol_table;
+	public:
+		Symbol_node(void);
+		~Symbol_node(void);
+		//void putval(VALUE);
+		void putval(int);
+		//VALUE getval(void);
+		int getval(void);
+	private:
+		char * id;
+		//int token;
+		//VALUE value;
+		int val;
+		Symbol_node * next;
+};
+#endif
+typedef Symbol_node * Symbol_ptr;
+#ifndef SYM_TABLE
+#define SYM_TABLE
+class Symbol_table {
+	public:
+
+		Symbol_table(void)
+		{
+			table = new Symbol_ptr[211];
+		}
+		~Symbol_table(void);
+		//hash function
+		int hash(const char * name) 
+		{
+			int hashVal = 0;
+			hashVal += atoi(name);
+
+			return hashVal % 211;
+		}
+		//insert something into the table
+		Symbol_ptr insert (char * name) 
+		{
+			Symbol_ptr ptr;
+			int hashVal = hash(name);
+
+			return ptr;
+		}
+		//void remove(char *);
+		Symbol_ptr lookup(char *);
+		//void dump_table(void);
+		//int table_size = 211;
+	private:
+		Symbol_ptr *table;
+};
+#endif
+
+Symbol_table sym_table;
+
 int yyparse(void);
 int yylex(void);
 void yyerror(const char *message);
 %}
 
+
 %union{
    int val;
-   int var_pos;
+   Symbol_ptr symbol_ptr;
 }
-%token<var_pos> ID
+
+%token<symbol_ptr> ID
+//%token<var_pos> ID
 %token<val> NUMBER
 %token EQUAL PLUS MULT NEWLINE LPAREN RPAREN MINUS DIV MOD POW
 %type <val> expr term factor stmt
@@ -23,7 +85,7 @@ void yyerror(const char *message);
 stmt_list	:	stmt NEWLINE
 			|	stmt_list stmt NEWLINE
 			;
-stmt		:	ID EQUAL expr {var[$1] = $3; cout << "=" << $3 << endl;}
+stmt		:	ID EQUAL expr {sym_table.insert($1) = $3; cout << "=" << $3 << endl;}
 			|	expr {cout << "=" << $1 << endl;}
 			;
 expr		:	expr PLUS term {$$ = $1 + $3;}
@@ -39,7 +101,7 @@ term		:	term MULT factor {$$ = $1 * $3;}
 factor 		:	LPAREN expr RPAREN {$$ = $2;}
 			|	factor POW factor {$$ = pow($1,$3);}
 			|	NUMBER	{$$ = $1;}
-			|	ID {$$ = var[$1];}
+			|	ID {$$ = $1->getval()}//{$$ = $1;}
 			;
 %%
 int main(void)
