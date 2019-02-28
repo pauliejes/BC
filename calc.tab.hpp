@@ -65,12 +65,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 73 "calc.ypp" /* yacc.c:1909  */
+#line 20 "calc.ypp" /* yacc.c:1909  */
 
    int val;
    Symbol_ptr symbol_ptr;
+   //int var_pos;
 
-#line 74 "calc.tab.hpp" /* yacc.c:1909  */
+#line 75 "calc.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -2,7 +2,7 @@ LEX = flex
 YACC = bison
 CC = g++
 bc:			calc.tab.o lex.yy.o
-			$(CC) -o bc calc.tab.o lex.yy.o -lfl -lm
+			$(CC)  -o bc calc.tab.o lex.yy.o -lfl -lm
 
 lex.yy.o:		lex.yy.cc calc.tab.hpp
 
@@ -13,6 +13,9 @@ calc.tab.cpp calc.tab.hpp:	calc.ypp
 
 lex.yy.cc:		calc.l
 			$(LEX) -+ calc.l
+
+symbol_table:	symbol_table.cpp symbol_table.h
+			$(CC) -c symbol_table.cpp
 
 clean:
 			rm bc lex.yy.* calc.tab.*

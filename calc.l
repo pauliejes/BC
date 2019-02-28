@@ -1,6 +1,9 @@
 %{
+#include"symbol_table.h"
 #include"calc.tab.hpp"
-extern int var[26];
+//#include"general.h"
+//extern int var[26];
+extern Symbol_table sym_table;
 
 yyFlexLexer lexer;
 int yylex(void)
@@ -17,8 +20,9 @@ id			{letter}({letter}|{digit})*
 digit		[0-9]
 number		{digit}+
 %%
+"quit"		{exit(0);}
 {ws}		{/*no action*/}
-{id}		{yylval.var_pos = sym_table.lookup(yytext);return(ID);}
+{id}		{yylval.symbol_ptr = sym_table.lookup(yytext);return(ID);}
 {number}	{yylval.val = atoi(yytext);return(NUMBER);}
 "\n"		{return(NEWLINE);}
 "+"			{return(PLUS);}
@@ -30,5 +34,4 @@ number		{digit}+
 "("			{return(LPAREN);}
 ")"			{return(RPAREN);}
 "="			{return(EQUAL);}
-"quit"		{exit(0);}
 %%

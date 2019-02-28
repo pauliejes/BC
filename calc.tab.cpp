@@ -68,64 +68,11 @@
 #include<iostream>
 #include<cstdio>
 #include<cmath>
-#include <cstdlib>
+#include<cstdlib>
+#include"symbol_table.h"
+#include"general.h"
 using namespace std;
 //static int var[26];
-
-#ifndef SYM_NODE
-#define SYM_NODE
-class Symbol_node {
-	friend class Symbol_table;
-	public:
-		Symbol_node(void);
-		~Symbol_node(void);
-		//void putval(VALUE);
-		void putval(int);
-		//VALUE getval(void);
-		int getval(void);
-	private:
-		char * id;
-		//int token;
-		//VALUE value;
-		int val;
-		Symbol_node * next;
-};
-#endif
-typedef Symbol_node * Symbol_ptr;
-#ifndef SYM_TABLE
-#define SYM_TABLE
-class Symbol_table {
-	public:
-
-		Symbol_table(void)
-		{
-			table = new Symbol_ptr[211];
-		}
-		~Symbol_table(void);
-		//hash function
-		int hash(const char * name) 
-		{
-			int hashVal = 0;
-			hashVal += atoi(name);
-
-			return hashVal % 211;
-		}
-		//insert something into the table
-		Symbol_ptr insert (char * name) 
-		{
-			Symbol_ptr ptr;
-			int hashVal = hash(name);
-
-			return ptr;
-		}
-		//void remove(char *);
-		Symbol_ptr lookup(char *);
-		//void dump_table(void);
-		//int table_size = 211;
-	private:
-		Symbol_ptr *table;
-};
-#endif
 
 Symbol_table sym_table;
 
@@ -133,7 +80,7 @@ int yyparse(void);
 int yylex(void);
 void yyerror(const char *message);
 
-#line 137 "calc.tab.cpp" /* yacc.c:339  */
+#line 84 "calc.tab.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -188,12 +135,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 73 "calc.ypp" /* yacc.c:355  */
+#line 20 "calc.ypp" /* yacc.c:355  */
 
    int val;
    Symbol_ptr symbol_ptr;
+   //int var_pos;
 
-#line 197 "calc.tab.cpp" /* yacc.c:355  */
+#line 145 "calc.tab.cpp" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -210,7 +158,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 214 "calc.tab.cpp" /* yacc.c:358  */
+#line 162 "calc.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -508,8 +456,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    85,    85,    86,    88,    89,    91,    92,    93,    95,
-      96,    97,    98,    99,   101,   102,   103,   104
+       0,    33,    33,    34,    36,    37,    39,    40,    41,    43,
+      44,    45,    46,    47,    49,    50,    51,    52
 };
 #endif
 
@@ -1294,91 +1242,91 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 88 "calc.ypp" /* yacc.c:1646  */
-    {sym_table.insert((yyvsp[-2].symbol_ptr)) = (yyvsp[0].val); cout << "=" << (yyvsp[0].val) << endl;}
-#line 1300 "calc.tab.cpp" /* yacc.c:1646  */
+#line 36 "calc.ypp" /* yacc.c:1646  */
+    {(yyvsp[-2].symbol_ptr)->putval((yyvsp[0].val)); cout << "=" << (yyvsp[0].val) << endl;}
+#line 1248 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 89 "calc.ypp" /* yacc.c:1646  */
+#line 37 "calc.ypp" /* yacc.c:1646  */
     {cout << "=" << (yyvsp[0].val) << endl;}
-#line 1306 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1254 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 91 "calc.ypp" /* yacc.c:1646  */
+#line 39 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val);}
-#line 1312 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1260 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 92 "calc.ypp" /* yacc.c:1646  */
+#line 40 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val);}
-#line 1318 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1266 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 93 "calc.ypp" /* yacc.c:1646  */
+#line 41 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[0].val);}
-#line 1324 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1272 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 95 "calc.ypp" /* yacc.c:1646  */
+#line 43 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val);}
-#line 1330 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1278 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 96 "calc.ypp" /* yacc.c:1646  */
+#line 44 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val);}
-#line 1336 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1284 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 97 "calc.ypp" /* yacc.c:1646  */
+#line 45 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[-2].val) % (yyvsp[0].val);}
-#line 1342 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1290 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 98 "calc.ypp" /* yacc.c:1646  */
+#line 46 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[0].val);}
-#line 1348 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1296 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 99 "calc.ypp" /* yacc.c:1646  */
+#line 47 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = -(yyvsp[0].val);}
-#line 1354 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1302 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 101 "calc.ypp" /* yacc.c:1646  */
+#line 49 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[-1].val);}
-#line 1360 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1308 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 102 "calc.ypp" /* yacc.c:1646  */
+#line 50 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = pow((yyvsp[-2].val),(yyvsp[0].val));}
-#line 1366 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1314 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 103 "calc.ypp" /* yacc.c:1646  */
+#line 51 "calc.ypp" /* yacc.c:1646  */
     {(yyval.val) = (yyvsp[0].val);}
-#line 1372 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1320 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 104 "calc.ypp" /* yacc.c:1646  */
-    {(yyval.val) = (yyvsp[0].symbol_ptr)->getval()}
-#line 1378 "calc.tab.cpp" /* yacc.c:1646  */
+#line 52 "calc.ypp" /* yacc.c:1646  */
+    {(yyval.val) = (yyvsp[0].symbol_ptr)->getval();}
+#line 1326 "calc.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1382 "calc.tab.cpp" /* yacc.c:1646  */
+#line 1330 "calc.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1606,7 +1554,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 106 "calc.ypp" /* yacc.c:1906  */
+#line 54 "calc.ypp" /* yacc.c:1906  */
 
 int main(void)
 {
