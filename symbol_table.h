@@ -37,7 +37,7 @@ class Symbol_table {
 		//void remove(char *);
 		//find the variable and return a pointer to it
 		Symbol_ptr lookup(char * name);
-		//void dump_table(void);
+		void dump_table(void);
 		//int table_size = 211;
 	private:
 		Symbol_ptr *table;

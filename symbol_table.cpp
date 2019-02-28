@@ -67,3 +67,15 @@ Symbol_ptr Symbol_table::lookup(char * name)
 	//cout << "past the fucking table thign\n";
 	return ptr;
 }
+
+void Symbol_table::dump_table(void) {
+	for (int i = 0; i < 211; ++i)
+	{
+		if (this->table[i] == 0)
+		{
+			cout << i+1 << " | " << "empty" << endl;
+		} else {
+			cout << i+1 << " | " << this->table[i]->id << " = " << this->table[i]->val << endl;
+		}
+	}
+}
