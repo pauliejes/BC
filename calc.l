@@ -22,7 +22,7 @@ number		{digit}+
 %%
 "quit"		{exit(0);}
 {ws}		{/*no action*/}
-{id}		{yylval.symbol_ptr = sym_table.lookup(yytext);return(ID);}
+{id}		{yylval.symbol_ptr = sym_table.insert(yytext);return(ID);}
 {number}	{yylval.val = atoi(yytext);return(NUMBER);}
 "\n"		{return(NEWLINE);}
 "+"			{return(PLUS);}

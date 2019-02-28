@@ -429,8 +429,8 @@ static yyconst flex_int16_t yy_chk[47] =
 #define YY_RESTORE_YY_MORE_OFFSET
 #line 1 "calc.l"
 #line 2 "calc.l"
-#include"calc.tab.hpp"
 #include"symbol_table.h"
+#include"calc.tab.hpp"
 //#include"general.h"
 //extern int var[26];
 extern Symbol_table sym_table;
@@ -644,7 +644,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 25 "calc.l"
-{yylval.symbol_ptr = sym_table.lookup(yytext);return(ID);}
+{yylval.symbol_ptr = sym_table.insert(yytext);return(ID);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP

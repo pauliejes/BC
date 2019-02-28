@@ -9,7 +9,7 @@
 class Symbol_node {
 	friend class Symbol_table;
 	public:
-		Symbol_node(void);
+		Symbol_node(char * id);
 		~Symbol_node(void);
 		//void putval(VALUE);
 		void putval(int);
@@ -28,7 +28,6 @@ typedef Symbol_node * Symbol_ptr;
 #define SYM_TABLE
 class Symbol_table {
 	public:
-
 		Symbol_table(void);
 		~Symbol_table(void);
 		//hash function
