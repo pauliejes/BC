@@ -3,6 +3,7 @@
 #include<cstdio>
 #include<cmath>
 #include<cstdlib>
+#include<cstring>
 
 #ifndef SYM_NODE
 #define SYM_NODE
@@ -17,6 +18,8 @@ class Symbol_node {
 		int getval(void);
 		Symbol_node * getNext();
 		void setNext(Symbol_node * next);
+		char * getId();
+		void setId(char * id);
 	private:
 		char * id;
 		//int token;
