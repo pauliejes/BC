@@ -18,5 +18,5 @@ symbol_table.o:	symbol_table.cpp symbol_table.h
 			$(CC) -c symbol_table.cpp
 
 clean:
-			rm bc lex.yy.* calc.tab.* y.tab.* 
+			rm bc lex.yy.* calc.tab.* symbol_table.o
 

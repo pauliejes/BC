@@ -3,20 +3,17 @@
 using namespace std;
 
 Symbol_node::Symbol_node(char * id) {
-	cout << "initilizing and setting ID!!!!!!!!\n";
-        this->id = new char[strlen(id)+1];
+    this->id = new char[strlen(id)+1];
 	strcpy(this->id,id);
 }
 
 Symbol_node::~Symbol_node(void){}
 
 void Symbol_node::putval(int val) {
-	//cout << "id = " << this->id << " val = '" << val << "'\n" ;
 	this->val = val;
 }
 
 int Symbol_node::getval(void) {
-	cout << "RUNNING GETVAL | id = " << this->id << " getting value = " << val << endl;
 	return this->val;
 }
 
@@ -49,108 +46,110 @@ Symbol_table::~Symbol_table(void){
 
 }
 
+/* Description: 
+		This function hashes the name of the symbol into a bucket number
+	Input:
+		The name (id) of the symbol to  hash
+	Output:
+		and integer between 0 - 211. The index of the bucket the variable belongs in
+*/
 int Symbol_table::hash(const char * name) 
 {
 	int hashVal = 0;
 	for (int i = 0; i < sizeof(name)/sizeof(char); ++i)
 	{
-		hashVal += int(name[i]);
+		hashVal += int(name[i]) * i;
 	}
-	cout << "hash = " << hashVal % 211 << endl;
+	//cout << "hash = " << hashVal % 211 << endl;
 	return hashVal % 211;
 }
-//insert the new node at the head of the list in the bucket
-Symbol_ptr Symbol_table::insert (char * name, Symbol_ptr mother_node) 
+/* Description: 
+		This function inserts a symbol into the table if it is not already present in the table
+		then returns a pointer to the symbols location in memory
+	Input:
+		The name (id) of the symbol to find/insert
+	Output:
+		the pointer to where the symbol is located in memory
+*/
+Symbol_ptr Symbol_table::insert (char * name) 
 {
-	cout << "called insert\n";
-	Symbol_ptr ptr;
-	int hashVal = this->hash(name);
-
-	//set cur_ptr initially to address of first node in bucket (or 0 if there
-	//is not one)
-	Symbol_ptr cur_ptr = this->table[hashVal];
-	cout << "cur_ptr = " << cur_ptr << endl;
-	bool inserted = false;
-
-	//if no nodes in list
-	if (cur_ptr == 0) {
-		cout << "inserting " << name << " into root\n";
-		ptr = this->table[hashVal] = new Symbol_node(name);
-		cout << "inserted " << this->table[hashVal]->getId() << " into root\n";
-	} else {
-		while(!inserted) 
-		{
-			//if at end of list
-			if(cur_ptr->next == 0) 
-			{
-				cout << "inserted symbol " << name << endl;
-				cur_ptr->next = new Symbol_node(name);
-				ptr = cur_ptr->next;
-				inserted = true;
-			}
-			//set current pointer to pointer to the next node in the list
-			cur_ptr = cur_ptr->next;
-		}
+	//cout << "called insert\n";
+	
+	//check if the symbol is already in the table
+	Symbol_ptr ptr = this->lookup(name);
+	
+	//if lookup returns null (ptr is null)
+	//then insert into head of bucket
+	if(!ptr){
+		int hashVal = this->hash(name);
+		Symbol_ptr new_node = new Symbol_node(name);
+		new_node->setNext(this->table[hashVal]);
+		this->table[hashVal] = new_node;
+		ptr = new_node;
 	}
 
-	//mother_node->next = new Symbol_node(name);
-	//ptr = mother_node->getNext();
-	//ptr->setNext(0);
-	cout << "id = " << this->table[hashVal]->getId() << endl;
-	cout << "returning from insert\n\n";
 	return ptr;
 }
-//just return the location of the dang variable if it's already in the 
-//symbol table, or return a null pointer if it aint
+
+/* Description: 
+		This function searches the symbol table for the symbol name it is given
+	Input:
+		The name (id) of the symbol to find
+	Output:
+		the pointer to where the symbol is located in memory if it is in the table.
+		if the symbol is not found function returns a null pointer
+*/
 Symbol_ptr Symbol_table::lookup(char * name) 
 {
-	Symbol_ptr ptr;
+	Symbol_ptr ptr = NULL;
 	int hashVal = this->hash(name);
 	//while loop vars
 	Symbol_ptr cur_ptr = table[hashVal];
-	
-	
-	Symbol_ptr last_ptr = table[hashVal];
 	bool found = false;
 
-	cout << "current pointer : " << cur_ptr << endl;
-	do {
-		if(cur_ptr == 0) 
-		{
-			//symbol not found, insert it
-			cout << "symbol not found\n";
-			//cout << "name: " << name << "   last_ptr: " << last_ptr << endl;
-			ptr = this->insert(name, last_ptr);
+	//if the root of the bucket points to a node then travers the linked list
+	//looking for the symbol
+	while(cur_ptr != NULL && found == false) {
+		//if this is the variable being looked for
+		if(strcmp(cur_ptr->getId(), name) == 0) {
 			found = true;
-		} else {
-			cout << "lookup node_id = " << this->table[hashVal]->getId() << endl << endl;
-			//cout << "current pointer id = " << cur_ptr->getId() << endl;
-			cout << "name to find = " << name << endl;
-			if(strcmp(cur_ptr->getId(), name) == 0) 
-			{
-				//name matches node id
-				cout << "found an id match! : " << cur_ptr->getId() << " = " << name << endl;
-				last_ptr = ptr;
-				ptr = cur_ptr;
-				found = true;
-			} else {
-				cur_ptr = cur_ptr->next;
-			}
+			ptr = cur_ptr;
+		} 
+		//if the variable is not this node, go to the next one
+		else {
+			cur_ptr = cur_ptr->getNext();
 		}
-	} while (found == false);
-	
-	cout << "returning ptr = " << ptr << " from lookup\n\n";
+	}
+
 	return ptr;
 }
 
-void Symbol_table::dump_table(void) {
+/* Description: 
+		Prints out all of the symbols in the symbol table organized by
+		which bucket it is in
+	Output:
+		The full symbol table organized as described above
+*/
+void Symbol_table::dump_table() {
+	Symbol_ptr ptrz;
 	for (int i = 0; i < 211; ++i)
 	{
+		//if this bucket is empty
 		if (this->table[i] == 0)
 		{
+
 			cout << i+1 << " | " << "empty" << endl;
-		} else {
-			cout << i+1 << " | " << this->table[i]->id << " = " << this->table[i]->val << endl;
+		} 
+		//if this bucket contains a list of symbols
+		else {
+		
+			ptrz = this->table[i];
+			cout << i+1 << " | ";
+			do{
+				cout << ptrz->id << " = " << ptrz->val << "  ||  ";
+				ptrz = ptrz->getNext();
+			}while(ptrz != 0);
+			cout << endl;
 		}
 	}
 }

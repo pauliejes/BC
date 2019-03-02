@@ -38,7 +38,7 @@ class Symbol_table {
 		//hash function
 		int hash(const char * name);
 		//insert something into the table
-		Symbol_ptr insert (char * name, Symbol_ptr mother_node);
+		Symbol_ptr insert (char * name);
 		//void remove(char *);
 		//find the variable and return a pointer to it
 		Symbol_ptr lookup(char * name);
